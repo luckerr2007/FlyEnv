@@ -1,0 +1,11 @@
+{
+  "checkForUpdates": "التحقق من وجود تحديثات",
+  "update-available-message": "يتوفر إصدار أحدث من FlyEnv، هل تريد التحديث الآن؟",
+  "update-not-available-message": "أنت تستخدم أحدث إصدار!",
+  "update-downloaded-message": "جاهز للتثبيت...",
+  "update-error-message": "خطأ في التحديث",
+  "yes": "نعم",
+  "no": "لا",
+  "view-update-log": "عرض سجل التحديث",
+  "download-new-version": "تحميل نسخة جديدة"
+}

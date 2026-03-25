@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" class="icon" viewBox="0 0 1024 1024">
+    <defs>
+        <style>
+            @font-face{font-family:feedback-iconfont;src:url(//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff2?t=1630033759944)format(&quot;woff2&quot;),url(//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff?t=1630033759944)format(&quot;woff&quot;),url(//at.alicdn.com/t/font_1031158_u69w8yhxdu.ttf?t=1630033759944)format(&quot;truetype&quot;)}
+        </style>
+    </defs>
+    <path d="m213.71733 173.16267 287.27467 287.232 287.21067-287.232a8.5333 8.5333 0 0 1 6.03733-2.496h66.90133a8.53333 8.53333 0 0 1 6.03734 14.57066L546.496 505.89867l332.84267 332.864a8.53333 8.53333 0 0 1-6.03734 14.57066H806.912a8.5333 8.5333 0 0 1-6.03733-2.496L501.248 551.14667 201.51467 850.83733a8.5333 8.5333 0 0 1-6.016 2.496H128.64a8.53333 8.53333 0 0 1-6.03733-14.57066l333.12-333.12L135.296 185.216a8.53333 8.53333 0 0 1 6.03733-14.54933H207.68a8.5333 8.5333 0 0 1 6.03733 2.496"/>
+</svg>

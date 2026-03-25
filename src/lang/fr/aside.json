@@ -1,0 +1,19 @@
+{
+  "site": "Site",
+  "webServer": "Serveur Web",
+  "dataBaseServer": "Serveur de Base de Données",
+  "emailServer": "Serveur Email",
+  "language": "Langage et environnement d'exécution",
+  "dataQueue": "File de Données et Cache",
+  "searchEngine": "Moteur de Recherche",
+  "dnsServer": "Serveur DNS",
+  "ftpServer": "Serveur FTP",
+  "containerRuntime": "Env. d'exécution du Conteneur",
+  "other": "Autre",
+  "appLog": "Journal de l'Application",
+  "ai": "IA",
+  "objectStorage": "Stockage d'Objets",
+  "networkTunnel": "Tunnel Réseau",
+  "appExit": "Arrêter tous les services démarrés et quitter FlyEnv",
+  "groupStart": "Démarrer en un clic tous les services disponibles affichés sur le panneau"
+}

@@ -1,0 +1,82 @@
+name: Build FlyEnv Windows Packages
+on:
+  push:
+    paths:
+      - 'build/windows.build.yml'
+
+jobs:
+  build-windows:
+    name: Build Windows Packages (x64)
+    runs-on: windows-2022
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          # 安装必要的构建工具
+          choco install -y make
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Setup Latest Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+
+      - name: Cache node_modules and node-gyp
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            **/node_modules
+            .yarn/cache
+            ~/.cache/node-gyp
+            ~\AppData\Local\node-gyp
+          key: ${{ runner.os }}-x64-node-${{ hashFiles('**/package.json') }}
+
+      - name: Install Yarn and build tools
+        run: |
+          npm install -g yarn node-gyp
+          python -m pip install --upgrade pip
+
+      - name: Install dependencies with Yarn
+        run: |
+          # Force link against WinRT runtime objects
+          $env:LINK = "runtimeobject.lib"
+          yarn install
+
+      - name: Build Go helper with build-win.ps1
+        run: |
+          go install github.com/tc-hib/go-winres@latest
+          $GOBIN = $(go env GOPATH) + "\bin"
+          $env:PATH = "$GOBIN;$env:PATH"
+          cd "$env:GITHUB_WORKSPACE/src/helper-go"
+          go clean -modcache
+          go mod download
+          go mod tidy
+          go-winres make
+          # 使用 PowerShell 脚本构建
+          .\build-win.ps1
+
+      - name: Build Electron packages with electron-builder
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd "$env:GITHUB_WORKSPACE"
+          yarn build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlyEnv-Windows-x64
+          path: |
+            release/*.exe
+            release/*.msi
+            release/*.yml
+            release/*.blockmap
