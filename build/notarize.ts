@@ -6,18 +6,23 @@ export default async function notarizing(context) {
     return
   }
 
-  const jwt = {
-    appleApiIssuer: process.env.APPLE_API_ISSUER,
-    appleApiKeyId: process.env.APPLE_API_KEY_ID,
-    appleApiKey: process.env.APPLE_API_KEY_PATH,
+  const appleApiIssuer = process.env.APPLE_API_ISSUER
+  const appleApiKeyId = process.env.APPLE_API_KEY_ID
+  const appleApiKey = process.env.APPLE_API_KEY_PATH
+
+  if (!appleApiIssuer || !appleApiKeyId || !appleApiKey) {
+    console.log('Skipping notarization: Apple API credentials not configured')
+    return
   }
 
   const appName = context.packager.appInfo.productFilename
   let param = {
     tool: 'notarytool',
-    appPath: `${appOutDir}/${appName}.app`
+    appPath: `${appOutDir}/${appName}.app`,
+    appleApiIssuer,
+    appleApiKeyId,
+    appleApiKey
   }
-  param = { ...param, ...jwt }
   await notarize(param)
   return
 }

@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-windows:
     name: Build Windows (x64)
@@ -29,6 +32,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 'stable'
+          cache-dependency-path: src/helper-go/go.sum
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -54,7 +58,6 @@ jobs:
           $GOBIN = $(go env GOPATH) + "\bin"
           $env:PATH = "$GOBIN;$env:PATH"
           cd "$env:GITHUB_WORKSPACE/src/helper-go"
-          go clean -modcache
           go mod download
           go mod tidy
           go-winres make
@@ -65,14 +68,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn build
 
+      - name: List release directory
+        run: |
+          if (Test-Path release) {
+            Get-ChildItem release -Recurse
+          } else {
+            Write-Host "Release directory not found!"
+          }
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-x64
-          path: |
-            release/*.exe
-            release/*.yml
-            release/*.blockmap
+          path: release/
+          if-no-files-found: warn
 
   build-macos:
     name: Build macOS (${{ matrix.arch }})
@@ -99,6 +108,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 'stable'
+          cache-dependency-path: src/helper-go/go.sum
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -128,15 +138,20 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: false
         run: yarn build
 
+      - name: List release directory
+        run: |
+          if [ -d "release" ]; then
+            ls -la release/
+          else
+            echo "Release directory not found!"
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-${{ matrix.arch }}
-          path: |
-            release/*.dmg
-            release/*.zip
-            release/*.yml
-            release/*.blockmap
+          path: release/
+          if-no-files-found: warn
 
   build-linux:
     name: Build Linux (${{ matrix.arch }})
@@ -167,6 +182,7 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 'stable'
+          cache-dependency-path: src/helper-go/go.sum
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -195,19 +211,26 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn build
 
+      - name: List release directory
+        run: |
+          if [ -d "release" ]; then
+            ls -la release/
+          else
+            echo "Release directory not found!"
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: linux-${{ matrix.arch }}
-          path: |
-            release/*.deb
-            release/*.rpm
-            release/*.yml
+          path: release/
+          if-no-files-found: warn
 
   release:
     name: Create Release
     needs: [build-windows, build-macos, build-linux]
     runs-on: ubuntu-latest
+    if: success()
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
