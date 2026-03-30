@@ -1,4 +1,4 @@
-name: Release FlyEnv
+name: Release LuckEnv
 
 on:
   push:
@@ -176,91 +176,9 @@ jobs:
           path: release/
           if-no-files-found: error
 
-  build-linux:
-    name: Build Linux (${{ matrix.arch }})
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
-    strategy:
-      matrix:
-        include:
-          - arch: x64
-            os: ubuntu-22.04
-          - arch: arm64
-            os: ubuntu-22.04-arm
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y g++ make python3 python3-pip pkg-config fakeroot rpm
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 'stable'
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            node_modules
-            **/node_modules
-            .yarn/cache
-            ~/.cache/node-gyp
-          key: ${{ runner.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/package.json') }}
-
-      - name: Install dependencies
-        run: |
-          npm install -g yarn node-gyp
-          yarn install --network-timeout 1000000
-
-      - name: Build Go helper
-        run: |
-          cd "$GITHUB_WORKSPACE/src/helper-go"
-          chmod +x ./build-os.sh
-          bash ./build-os.sh
-
-      - name: Build Electron packages
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn build 2>&1 | tee build.log
-
-      - name: List build output
-        run: |
-          echo "=== Current directory ==="
-          ls -la
-          echo "=== Checking release directory ==="
-          if [ -d "release" ]; then
-            ls -la release/
-          else
-            echo "Release directory not found!"
-            echo "=== Checking dist directory ==="
-            if [ -d "dist" ]; then
-              ls -la dist/
-            fi
-            echo "=== Build log (last 50 lines) ==="
-            if [ -f "build.log" ]; then
-              tail -50 build.log
-            fi
-          fi
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-${{ matrix.arch }}
-          path: release/
-          if-no-files-found: error
-
   release:
     name: Create Release
-    needs: [build-windows, build-macos, build-linux]
+    needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
     if: success()
     steps:
@@ -286,7 +204,7 @@ jobs:
           find release-artifacts -type f
           
           echo "=== Copying release files ==="
-          find release-artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.zip" -o -name "*.deb" -o -name "*.rpm" \) -exec cp {} release-final/ \;
+          find release-artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec cp {} release-final/ \;
           
           echo "=== Final release files ==="
           ls -la release-final/
@@ -304,28 +222,27 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: FlyEnv ${{ steps.get_version.outputs.VERSION }}
+          name: LuckEnv ${{ steps.get_version.outputs.VERSION }}
           body: |
-            ## FlyEnv ${{ steps.get_version.outputs.VERSION }}
+            ## LuckEnv ${{ steps.get_version.outputs.VERSION }}
             
             ### 下载链接
             
             | 平台 | 架构 | 文件 |
             |------|------|------|
-            | **Windows** | x64 | `FlyEnv-Setup-${{ steps.get_version.outputs.VERSION }}.exe` |
-            | **macOS** | Intel (x64) | `FlyEnv-${{ steps.get_version.outputs.VERSION }}.dmg` |
-            | **macOS** | Apple Silicon (arm64) | `FlyEnv-${{ steps.get_version.outputs.VERSION }}-arm64.dmg` |
-            | **Linux** | x64 | `FlyEnv-${{ steps.get_version.outputs.VERSION }}-x64.deb` / `.rpm` |
-            | **Linux** | arm64 | `FlyEnv-${{ steps.get_version.outputs.VERSION }}-arm64.deb` / `.rpm` |
+            | **Windows** | x64 | `LuckEnv-Setup-${{ steps.get_version.outputs.VERSION }}.exe` |
+            | **macOS** | Intel (x64) | `LuckEnv-${{ steps.get_version.outputs.VERSION }}.dmg` |
+            | **macOS** | Apple Silicon (arm64) | `LuckEnv-${{ steps.get_version.outputs.VERSION }}-arm64.dmg` |
             
             ### 更新说明
             
             - 移除许可证限制，所有功能完全开放
             - 更新作者信息
+            - 仅支持 Windows 和 macOS
             
             ---
             
-            **完整更新日志**: https://github.com/luckerr2007/FlyEnv/compare/${{ steps.get_version.outputs.VERSION }}...HEAD
+            **完整更新日志**: https://github.com/luckerr2007/LuckEnv/compare/${{ steps.get_version.outputs.VERSION }}...HEAD
           files: release-final/*
           draft: false
           prerelease: false
