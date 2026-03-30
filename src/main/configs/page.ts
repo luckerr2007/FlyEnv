@@ -20,7 +20,7 @@ interface PageOptions {
 const options: PageOptions = {
   index: {
     attrs: {
-      title: 'FlyEnv',
+      title: 'LuckEnv',
       width: 1200,
       height: 800,
       minWidth: 800,

@@ -2,8 +2,8 @@ import type { Configuration } from 'electron-builder'
 import AfterSign from '../build/afterSign'
 
 const conf: Configuration = {
-  productName: 'FlyEnv',
-  executableName: 'FlyEnv',
+  productName: 'LuckEnv',
+  executableName: 'LuckEnv',
   buildVersion: '4.13.6',
   electronVersion: '35.7.5',
   appId: 'phpstudy.xpfme.com',
@@ -20,9 +20,9 @@ const conf: Configuration = {
     '!**/node_modules/.bin',
     '!**/node_modules/node-pty/build/node_gyp_bins'
   ],
-  artifactName: 'FlyEnv-Setup-${version}.${ext}',
+  artifactName: 'LuckEnv-Setup-${version}.${ext}',
   win: {
-    artifactName: 'FlyEnv-Setup-${version}.${ext}',
+    artifactName: 'LuckEnv-Setup-${version}.${ext}',
     asarUnpack: ['**/*.node', '**/node_modules/sharp/**/*', '**/node_modules/@img/**/*'],
     extraResources: [
       {
@@ -49,8 +49,8 @@ const conf: Configuration = {
     allowElevation: true
   },
   portable: {
-    artifactName: 'FlyEnv-Portable-${version}.${ext}',
-    unpackDirName: 'FlyEnv-Portable-${version}'
+    artifactName: 'LuckEnv-Portable-${version}.${ext}',
+    unpackDirName: 'LuckEnv-Portable-${version}'
   },
   publish: [],
   afterSign: AfterSign

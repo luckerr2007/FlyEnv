@@ -17,8 +17,8 @@ const currentArch = process.arch === 'arm64' ? 'arm64' : 'x64'
  * One Environ
  */
 const conf: Configuration = {
-  productName: 'FlyEnv',
-  executableName: 'FlyEnv',
+  productName: 'LuckEnv',
+  executableName: 'LuckEnv',
   buildVersion: '4.13.6',
   electronVersion: '35.7.5',
   appId: 'phpstudy.xpfme.com',
@@ -68,8 +68,8 @@ const conf: Configuration = {
     asarUnpack: ['**/*.node', '**/node_modules/sharp/**/*', '**/node_modules/@img/**/*'],
     extendInfo: {
       'Icon file': 'icon.icns',
-      CFBundleDisplayName: 'FlyEnv',
-      CFBundleExecutable: 'FlyEnv'
+      CFBundleDisplayName: 'LuckEnv',
+      CFBundleExecutable: 'LuckEnv'
     },
     type: 'distribution',
     darkModeSupport: true,
