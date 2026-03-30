@@ -3,9 +3,6 @@
     <div class="setup-common">
       <div class="row-2">
         <div class="col">
-          <LangeSet />
-        </div>
-        <div class="col">
           <theme-set />
         </div>
       </div>
@@ -24,14 +21,8 @@
         <div class="col">
           <ForceStart />
         </div>
-        <div class="col">
-          <Tool />
-        </div>
       </div>
       <div class="row-2">
-        <div class="col">
-          <AutoUpdate />
-        </div>
         <div class="col">
           <AutoLanch />
         </div>
@@ -63,14 +54,11 @@
   import BrewSrc from './BrewSrc/index.vue'
   import RestPassword from './RestPassword/index.vue'
   import ProxySet from './ProxySet/index.vue'
-  import LangeSet from './LangSet/index.vue'
-  import AutoUpdate from './AutoUpdate/index.vue'
   import { AppStore } from '@/store/app'
   import { computed, watch } from 'vue'
   import ForceStart from './ForceStart/index.vue'
   import MacPortsSrc from './MacPortsSrc/index.vue'
   import ThemeSet from './Theme/index.vue'
-  import Tool from './Tool/index.vue'
   import AutoLanch from './AutoLanch/index.vue'
   import AutoHide from './AutoHide/index.vue'
   import AutoStartService from './AutoStartService/index.vue'

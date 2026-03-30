@@ -4,9 +4,6 @@
       <div class="flex items-baseline gap-3">
         <span class="text-2xl">LuckEnv</span>
         <span>Version {{ version }}</span>
-        <el-button type="primary" size="small" @click.stop="checkUpdate">{{
-          I18nT('update.checkForUpdates')
-        }}</el-button>
       </div>
     </template>
     <div class="about-panel">
@@ -78,7 +75,6 @@
   import { AppStore } from '@/store/app'
   import { app, shell } from '@/util/NodeFn'
   import IPC from '@/util/IPC'
-  import { I18nT } from '@lang/index'
 
   const version = ref('')
   const appStore = AppStore()
@@ -93,10 +89,6 @@
   const toHome = (e: Event) => {
     e.preventDefault()
     shell.openExternal('https://github.com/luckerr2007/LuckEnv')
-  }
-
-  const checkUpdate = () => {
-    appStore.checkUpdate(false)
   }
 
   let times = 0
