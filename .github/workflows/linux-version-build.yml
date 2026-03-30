@@ -3,6 +3,9 @@ on:
   push:
     paths:
       - 'build/linux.build.yml'
+      - '.github/workflows/linux-version-build.yml'
+      - 'src/helper-go/build.sh'
+  workflow_dispatch:
 
 jobs:
   build-packages:
@@ -10,6 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
+      fail-fast: false
       matrix:
         include:
           - arch: x64
@@ -66,8 +70,8 @@ jobs:
       - name: Build Go helper
         run: |
           cd "$GITHUB_WORKSPACE/src/helper-go"
-          chmod +x ./build-os.sh
-          bash ./build-os.sh
+          chmod +x ./build.sh
+          bash ./build.sh
 
       - name: Build Electron packages with electron-builder
         env:
